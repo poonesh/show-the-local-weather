@@ -13,11 +13,15 @@ document.addEventListener("DOMContentLoaded", function(event){
 		let latitude = position.coords.latitude;
 		let longitude = position.coords.longitude;
 		let localWeatherRequest = new XMLHttpRequest();
-		localWeatherRequest.open("GET", 'http://api.openweathermap.org/data/2.5/weather?lat='+latitude+'&lon='+longitude+
+		localWeatherRequest.open("GET", 'https://api.openweathermap.org/data/2.5/weather?lat='+latitude+'&lon='+longitude+
 				'&APPID=9492469ab458cfd72f7c962d1d6512ed');
 
 		localWeatherRequest.onload = function(){
 				localWeather = JSON.parse(localWeatherRequest.responseText);
+				console.log(localWeather);
+				let iconCode = localWeather.weather[0].icon;
+				let iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
+				document.querySelector(".WeatherIcon").innerHTML = "<img src='"+iconUrl+"'>";
 				document.querySelector(".tempC").innerHTML = (Math.round(Number(localWeather.main.temp) - 273.15)+"C");
 		};
 		localWeatherRequest.send();
