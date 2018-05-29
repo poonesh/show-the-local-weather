@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(event){
 
 	let localWeather;
+	let celsius = true;
 	function getLocation(){
 		if(navigator.geolocation){
 			navigator.geolocation.getCurrentPosition(showPosition);
@@ -18,17 +19,25 @@ document.addEventListener("DOMContentLoaded", function(event){
 
 		localWeatherRequest.onload = function(){
 				localWeather = JSON.parse(localWeatherRequest.responseText);
-				console.log(localWeather);
 				let iconCode = localWeather.weather[0].icon;
 				let iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
 				document.querySelector(".WeatherIcon").innerHTML = "<img src='"+iconUrl+"'>";
 				document.querySelector(".tempC").innerHTML = (Math.round(Number(localWeather.main.temp) - 273.15)+"C");
+				
 		};
 		localWeatherRequest.send();
 	}
 
-	document.querySelector(".convertToF").addEventListener("click", function(){
-		document.querySelector(".tempC").innerHTML = (Math.round(Number(localWeather.main.temp) - 273.15)*9/5+32+"F");	
+	document.querySelector(".convertTempUnit").addEventListener("click", function(){
+		if(celsius){
+			document.querySelector(".tempC").innerHTML = (Math.round(Number(localWeather.main.temp) - 273.15)*9/5+32+"F");
+			document.querySelector(".convertTempUnit").value = "Convert to C";
+			celsius = false;
+		}else{
+			document.querySelector(".tempC").innerHTML = (Math.round(Number(localWeather.main.temp) - 273.15)+"C");
+			document.querySelector(".convertTempUnit").value = "Convert to F";
+			celsius = true;
+		}	
 	});
 
 	getLocation();
